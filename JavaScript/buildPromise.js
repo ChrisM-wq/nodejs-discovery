@@ -1,4 +1,4 @@
-const lotteryPromise = new Promise(function(resolve, reject) {
+const lotteryPromise = new Promise(function (resolve, reject) {
   console.log("Lottery draw is happening");
   setTimeout(() => {
     if (Math.random() >= 0.5) {
@@ -15,8 +15,8 @@ lotteryPromise
   .catch(err => console.error(err));
 
 // Promisifying setTimeout
-const wait = function(seconds) {
-  return new Promise(function(resolve) {
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
     setTimeout(resolve, seconds * 1000);
   });
 };
