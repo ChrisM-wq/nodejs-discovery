@@ -11,8 +11,6 @@ const getHarryPotterCharacters = async (index) => {
   };
 };
 
-
-
 const getThreeCharacters = async () => {
   try {
     console.time('function-getThreeCharacters')
@@ -28,8 +26,7 @@ const getThreeCharacters = async () => {
   };
 };
 
-
-// Promise.all short circuits on reject
+// Promise.all -- short circuits on reject
 const getThreeCharactersParallel = async () => {
   try {
     console.time('function-getThreeCharactersParallel')
@@ -46,3 +43,42 @@ const getThreeCharactersParallel = async () => {
 getThreeCharacters();
 
 getThreeCharactersParallel();
+
+// Promise.race -- short circuits on reject
+(async function () {
+  const res = await Promise.race([
+    getHarryPotterCharacters(0),
+    getHarryPotterCharacters(1),
+    getHarryPotterCharacters(2)
+  ]);
+  console.log(res)
+})();
+
+const timeout = function (seconds) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error("request timed out!"));
+    }, seconds * 1000);
+  });
+};
+
+Promise.race([
+  getHarryPotterCharacters(0),
+  timeout(2)
+])
+  .then(res => console.log(res))
+  .catch(error => console.error(error.message));
+
+// Promise.allSettled
+Promise.allSettled([
+  Promise.resolve("Success"),
+  Promise.reject("ERROR"),
+  Promise.resolve("Another success")
+]).then(res => console.log(res));
+
+// Promise.any - return first fulfilled promise
+Promise.any([
+  Promise.resolve("Success"),
+  Promise.reject("ERROR"),
+  Promise.resolve("Another success")
+]).then(res => console.log(res));
