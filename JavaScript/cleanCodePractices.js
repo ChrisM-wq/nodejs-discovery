@@ -42,12 +42,10 @@ checkExpenses();
 
 console.log(budget);
 
-var bigExpenses = function (limit) {
-  var output = '';
-  for (var el of budget) {
-    if (el.value <= -limit) {
-      output += el.description.slice(-2) + ' / '; // Emojis are 2 chars
-    }
+var bigExpenses = function (bigLimit) {
+  let output = '';
+  for (let entry of budget) {
+    output += entry.value <= -bigLimit ? `${el.description.slice(-2)} / ` : '';
   }
   output = output.slice(0, -2); // Remove last '/ '
   console.log(output);
