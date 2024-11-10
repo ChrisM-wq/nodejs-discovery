@@ -9,43 +9,52 @@ const budget = [
   { value: -1800, description: 'New Laptop 💻', user: 'chir' },
 ];
 
-const spendingLimits = {
+// Restrict additions to object - only freezes first level
+const spendingLimits = Object.freeze({
   chris: 1500,
   sasha: 100,
+});
+
+spendingLimits.james = 900;
+
+console.log(spendingLimits);
+
+const getLimit = (limits, user) => limits?.[user] ?? 0;
+
+// Pure function
+const addExpense = function (
+  state,
+  limits,
+  value,
+  description,
+  user = "chris"
+) {
+  const cleanUser = user.toLowerCase();
+  return value <= getLimit(limits, cleanUser)
+    ? [...state, { value: -value, description, user: cleanUser }]
+    : state;
 };
 
-const addExpense = function (value, description, user = "chris") {
-  let limit = spendingLimits?.[user] ?? 0;
-  if (value > limit) {
-    console.log("Value exceeds limit!");
-    return;
-  };
-  budget.push({ value: -value, description, user });
+const newBudget1 = addExpense(budget, spendingLimits, 10, 'Pizza 🍕');
+const newBudget2 = addExpense(newBudget1, spendingLimits, 100, 'Going to movies 🍿', 'sasha');
+const newBudget3 = addExpense(newBudget2, spendingLimits, 200, 'Stuff', 'Jay');
+
+const checkExpenses = function (state, limits) {
+  return state.map(entry => {
+    return entry.value < -getLimit(limits, entry.user)
+      ? {...entry, flag: 'limit'}
+      : entry;
+  });
 };
 
-addExpense(10, 'Pizza 🍕');
-addExpense(100, 'Going to movies 🍿', 'sasha');
-addExpense(200, 'Stuff', 'Jay');
+const flaggedBudget = checkExpenses(newBudget3, spendingLimits);
 
-console.log(budget);
-
-const checkExpenses = function () {
-  for (let entry of budget) {
-    let limit = spendingLimits?.[entry.user] || 0;
-    if (entry.value < -limit) {
-      entry.flag = 'limit';
-    };
-  };
-};
-
-checkExpenses();
-
-console.log(budget);
+console.log(flaggedBudget);
 
 var bigExpenses = function (bigLimit) {
   let output = '';
   for (let entry of budget) {
-    output += entry.value <= -bigLimit ? `${el.description.slice(-2)} / ` : '';
+    output += entry.value <= -bigLimit ? `${entry.description.slice(-2)} / ` : '';
   }
   output = output.slice(0, -2); // Remove last '/ '
   console.log(output);
