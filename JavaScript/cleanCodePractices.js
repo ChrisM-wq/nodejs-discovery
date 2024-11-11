@@ -51,20 +51,12 @@ const flaggedBudget = checkExpenses(newBudget3, spendingLimits);
 
 console.log(flaggedBudget);
 
-var bigExpenses = function (bigLimit) {
-  let output = '';
-  for (let entry of budget) {
-    output += entry.value <= -bigLimit ? `${entry.description.slice(-2)} / ` : '';
-  }
-  output = output.slice(0, -2); // Remove last '/ '
-  console.log(output);
+var logBigExpenses = function (state, bigLimit) {
+  return state
+    .filter(entry => entry.value <= -bigLimit)
+    .map(entry => entry.description.slice(-2))
+    .join(' / ');
 };
 
-// const bigExpenses = function (limit) {
-//   let output;
-//   for (let entry of budget) {
-
-//   }
-// };
-
-bigExpenses(1000);
+const loggedBigExpenses = logBigExpenses(flaggedBudget, 1000);
+console.log(loggedBigExpenses);
