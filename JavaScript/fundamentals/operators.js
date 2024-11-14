@@ -27,4 +27,16 @@ console.log(ageChris > ageHappy); // >, <, >=, <=
 console.log(ageChris >= 23);
 
 const isOldEnough = ageChris >= 23;
+
+// Precedence of - over >
 console.log(now - 1991 > now - 2018);
+
+console.log(25 - 10 - 5);
+
+let xyz, abc;
+xyz = abc = 25 - 10 - 5; // x = y = 10, x = 10
+
+console.log(xyz, abc);
+
+const averageAge = ageChris - ageHappy / 2;
+console.log(ageChris, ageHappy, averageAge);
